@@ -1,0 +1,16 @@
+#!/bin/bash
+
+for i in `seq 1 ${1}`
+do
+ id ${2}${i} >users 2>&1
+ checkusers=`cat users |cut -d ' ' -f 3`
+ if [ "${checkusers}" == "no" ]; then
+  username="${2}${i}"
+  useradd ${username}
+  echo 0000 | passwd --stdin ${username} &>/dev/null
+  chage -d 0 ${username} &>/dev/null
+  echo "${2}${i} is creat success."
+ else
+  echo "${2}${i} is exist."
+ fi
+done
